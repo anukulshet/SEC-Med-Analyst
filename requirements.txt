@@ -1,0 +1,8 @@
+langgraph
+pandas
+numpy
+seaborn
+sqlalchemy
+psycopg2-binary
+streamlit
+python-dotenv

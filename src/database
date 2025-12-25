@@ -1,0 +1,27 @@
+from sqlalchemy import create_engine, Column, Integer, String, Float, Text
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+# Define the Database URL
+DATABASE_URL = "postgresql://admin:admin123@localhost:5432/sec_med_db"
+
+# Create the "Engine"
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+# Define the Table as a Python Class
+class AnalysisReport(Base):
+    __tablename__ = "intelligence_reports"
+
+    id = Column(Integer, primary_key=True, index=True)
+    ticker = Column(String(10), index=True)
+    risk_summary = Column(Text)
+    danger_score = Column(Float)
+
+# Create the table in Postgres
+def init_db():
+    Base.metadata.create_all(bind=engine)
+    print("✅ Database Bridge Built! Table created in PostgreSQL.")
+
+if __name__ == "__main__":
+    init_db()
