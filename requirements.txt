@@ -4,6 +4,6 @@ numpy
 seaborn
 sqlalchemy
 psycopg2-binary
-streamlit
+streamlit>=1.35.0
 python-dotenv
 requests
