@@ -1,7 +1,8 @@
 # SEC-Med Risk Intelligence Agent
 
 An autonomous multi-agent pipeline for healthcare and financial due diligence.
-Live Dashboard: [https://sec-med-analyst.streamlit.app](https://sec-med-analyst.streamlit.app)
+
+**Live Dashboard:** [https://sec-med-analyst.streamlit.app](https://sec-med-analyst.streamlit.app)
 
 ## The Problem
 
