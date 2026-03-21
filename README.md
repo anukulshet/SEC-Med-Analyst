@@ -1,6 +1,7 @@
 # SEC-Med Risk Intelligence Agent
 
 An autonomous multi-agent pipeline for healthcare and financial due diligence.
+Live Dashboard: [https://sec-med-analyst.streamlit.app](https://sec-med-analyst.streamlit.app)
 
 ## The Problem
 
@@ -20,9 +21,6 @@ Analysts spend hundreds of hours cross-referencing corporate financial filings w
 3. **Risk Calculator** combines both signals into a composite risk score using the formula: `(1 - sentiment) x log(risk_count + 1) x 10`
 4. Results are displayed in a dashboard with a risk gauge, score breakdown and raw audit table.
 
-## Live Demo
-
-[https://sec-med-analyst.streamlit.app](https://sec-med-analyst.streamlit.app)
 
 ## Setup
 
