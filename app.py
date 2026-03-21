@@ -10,6 +10,9 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+if "ticker_value" not in st.session_state:
+    st.session_state.ticker_value = ""
+
 
 st.markdown("""
 <style>
@@ -66,6 +69,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 #Sidebar
+with st.sidebar:
     st.markdown("## 🕵️ SEC-Med Analyst")
     st.markdown("*Autonomous Due Diligence Pipeline*")
     st.divider()
@@ -77,47 +81,55 @@ st.markdown("""
     st.divider()
 
     st.markdown("### Run Analysis")
-    ticker = st.text_input(
+    ticker_raw = st.text_input(
         "Company Ticker",
-        value="PFE",
+        value=st.session_state.ticker_value,
         placeholder="e.g. PFE, MRNA, JNJ, ABT",
-        help="Enter any US-listed healthcare or pharma ticker"
-    ).upper().strip()
+        help="Enter any US-listed healthcare or pharma ticker",
+    )
+    if ticker_raw != st.session_state.ticker_value:
+        st.session_state.ticker_value = ticker_raw
+    ticker = ticker_raw.upper().strip()
 
-    st.markdown("**Example tickers:**")
+    st.markdown("**Suggested tickers:**")
     col_a, col_b = st.columns(2)
     with col_a:
         for t in ["PFE", "MRNA", "JNJ"]:
             if st.button(t, key=f"btn_{t}", use_container_width=True):
-                ticker = t
+                st.session_state.ticker_value = t
+                st.rerun()
     with col_b:
         for t in ["ABT", "UNH", "CVS"]:
             if st.button(t, key=f"btn_{t}", use_container_width=True):
-                ticker = t
+                st.session_state.ticker_value = t
+                st.rerun()
 
     run_btn = st.button("▶ Run Risk Audit", type="primary", use_container_width=True)
     st.divider()
     st.caption("Data sources: SEC EDGAR (10-K filings) · Google News RSS")
-    st.caption("No API keys required.")
 
 #Main
 st.markdown("# 🕵️ SEC-Med Risk Intelligence")
-st.markdown("*Automated due diligence — real SEC filings · live news sentiment · quantitative risk scoring*")
+st.markdown("*Automated due diligence: real SEC filings · live news sentiment · quantitative risk scoring*")
 st.divider()
+
+if run_btn and not ticker:
+    st.warning("Please enter a ticker symbol or select one from the sidebar before running.")
+    st.stop()
 
 if not run_btn:
     st.markdown("""
     ### How it works
 
-    **Agent 1 — SEC Detective**
+    **Agent 1: SEC Detective**
     Queries the SEC EDGAR database for the company's most recent 10-K annual filing.
     Extracts and scores risk factor sentences from the official Item 1A disclosure section.
 
-    **Agent 2 — News Reporter**
+    **Agent 2: News Reporter**
     Fetches live news headlines via Google News RSS (no API key needed).
     Scores each headline using a financial/medical keyword sentiment lexicon.
 
-    **Agent 3 — Risk Calculator**
+    **Agent 3: Risk Calculator**
     Combines SEC risk count and news sentiment into a composite danger score using NumPy:
 
     ```
@@ -219,7 +231,7 @@ else:
     left_col, right_col = st.columns(2)
 
     with left_col:
-        st.markdown(f"### 🕵️ Detective Findings — SEC 10-K Risks")
+        st.markdown(f"### 🕵️ Detective Findings: SEC 10-K Risks")
         st.caption(f"{len(sec_risks)} risk factors extracted from official filing")
         if not sec_risks or (len(sec_risks) == 1 and "error" in sec_risks[0].lower()):
             st.warning(sec_risks[0] if sec_risks else "No risks extracted.")
@@ -228,7 +240,7 @@ else:
                 st.markdown(f'<div class="risk-item"><b>#{i}</b> {risk}</div>', unsafe_allow_html=True)
 
     with right_col:
-        st.markdown("### 📰 Reporter Analysis — Live News")
+        st.markdown("### 📰 Reporter Analysis: Live News")
         st.caption(f"{len(news_headlines)} headlines analyzed")
 
         if news_sentiment > 0.1:
